@@ -18,14 +18,32 @@
             --bg: #0a003c;
         }
 
-        /* Page background (deep) while hero and CTAs use gradient */
         body {
             background-color: var(--bg);
         }
 
-        /* small utility to keep text readable on bright gradients */
         .text-contrast {
             color: #ffffff;
+        }
+
+        /* Smooth fade for hero background images */
+        #hero-section .hero-bg,
+        #hero-section .hero-bg-next {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            border-radius: 12px;
+            z-index: 0;
+            opacity: 1;
+            transition: opacity 1s ease;
+            pointer-events: none;
+        }
+
+        #hero-section .hero-bg-next {
+            opacity: 0;
         }
     </style>
 </head>
@@ -59,8 +77,11 @@
     </header>
 
     <!-- HERO -->
-    <section class="px-6 py-16 md:py-24 text-center relative"
-        style="background-image: url('./DSC09408.jpg'); background-size: cover; background-position: center; border-radius: 12px; margin: 0 1.5rem;">
+    <section id="hero-section" class="px-6 py-16 md:py-24 text-center relative"
+        style="border-radius: 12px; margin: 0 1.5rem;">
+        <!-- SMOOTH SLIDER BACKGROUNDS -->
+        <div class="hero-bg"></div>
+        <div class="hero-bg-next"></div>
         <!-- FIXED OVERLAY -->
         <div class="absolute inset-0  bg-black/60 rounded-xl z-0"></div>
 
@@ -333,8 +354,7 @@
                 <input id="companyName" type="text" placeholder="Company Name"
                     class="w-full border border-gray-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-[var(--grad1)] focus:outline-none" />
 
-                <textarea id="reason" placeholder="Reason"
-                    class="w-full border border-gray-300 rounded-xl px-4 py-2 h-24 focus:ring-2 focus:ring-[var(--grad1)] focus:outline-none"></textarea>
+               
 
                 <div class="g-recaptcha" data-sitekey="6Le_TncrAAAAAKteAfrprp75oWzWKK1cZ2Qxao8p"></div>
 
@@ -367,9 +387,8 @@
         function openModal() {
             modal.classList.remove('hidden');
             modal.classList.add('flex');
-            // pre-fill reason and focus name
-            const reasonEl = document.getElementById('reason');
-            if (reasonEl) reasonEl.value = 'Diwali Wellness Consultation';
+            // focus name
+          
             setTimeout(() => document.getElementById('fullName')?.focus(), 120);
         }
 
@@ -405,7 +424,7 @@
                 email: document.getElementById('email').value.trim(),
                 contactNumber: document.getElementById('contactNumber').value.trim(),
                 companyName: document.getElementById('companyName').value.trim(),
-                reason: document.getElementById('reason').value.trim(),
+                reason: "Diwali Wellness Consultation",
                 captchaToken: recaptchaResponse
             };
 
@@ -430,6 +449,36 @@
                 errorMessage.classList.remove('hidden');
             }
         });
+
+        // Smooth animated background image slider for hero section
+        const heroImages = [
+            './DSC09408.jpg',
+            './7.jpg',
+            './1.jpeg',
+            './2.png'
+        ];
+        let heroIndex = 0;
+        const heroSection = document.getElementById('hero-section');
+        const heroBg = heroSection.querySelector('.hero-bg');
+        const heroBgNext = heroSection.querySelector('.hero-bg-next');
+
+        // Initialize first image
+        heroBg.style.backgroundImage = `url('${heroImages[heroIndex]}')`;
+
+        setInterval(() => {
+            // Next image index
+            const nextIndex = (heroIndex + 1) % heroImages.length;
+            // Set next image
+            heroBgNext.style.backgroundImage = `url('${heroImages[nextIndex]}')`;
+            heroBgNext.style.opacity = 1;
+
+            // Animate fade
+            setTimeout(() => {
+                heroBg.style.backgroundImage = `url('${heroImages[nextIndex]}')`;
+                heroBgNext.style.opacity = 0;
+                heroIndex = nextIndex;
+            }, 1000); // Duration matches CSS transition (1s)
+        }, 3500);
     </script>
 
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
