@@ -248,6 +248,14 @@
             </div>
         </section>
 
+        <!-- IMPACT STATS (NEW SECTION) -->
+        <section class="mb-10">
+            <div class="max-w-5xl mx-auto bg-white/10 rounded-2xl shadow-lg p-6 md:p-8 text-center">
+                <p class="text-xl md:text-2xl font-semibold text-white/90">
+                    In our last pan India festival, <span class="font-bold text-yellow-300">2,500 to 30,000 employees</span> participated with an average <span class="font-bold text-yellow-300">60% boost in workplace happiness</span>.
+                </p>
+            </div>
+        </section>
         <!-- Testimonials -->
         <section class="mb-12">
             <h3 class="text-2xl md:text-3xl font-bold text-center mb-8">What HR Leaders Say</h3>
@@ -381,6 +389,27 @@
         </div>
     </div>
 
+    <!-- EXIT-INTENT / SCROLL POPUP -->
+    <div id="exitIntentPopup" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50 p-4">
+        <div class="bg-white text-[var(--accent)] rounded-2xl shadow-2xl w-full max-w-md p-6 relative">
+            <button onclick="closeExitIntent()" class="absolute top-3 right-3 text-gray-500 hover:text-gray-700" aria-label="Close">
+                ✖
+            </button>
+            <div class="flex flex-col items-center">
+                <span class="inline-block mb-4 px-4 py-1 rounded-full bg-yellow-400 text-[var(--accent)] font-bold text-sm shadow animate-pulse">
+                    🕑 Don’t miss out!
+                </span>
+                <h3 class="text-xl font-bold text-center mb-2">Book your Free HR Wellness Consultation</h3>
+                <p class="text-center text-gray-700 mb-4">
+                    Discover how workplace wellness can make this Diwali more meaningful for your team.
+                </p>
+                <button onclick="openModal(); closeExitIntent();" class="w-full bg-gradient-to-r from-[var(--grad1)] to-[var(--grad2)] text-white font-semibold px-6 py-3 rounded-xl shadow-md transition hover:opacity-95">
+                    Book Now
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- SCRIPTS -->
     <script>
         // Fill year in footer
@@ -486,6 +515,39 @@
                 heroIndex = nextIndex;
             }, 1000); // Duration matches CSS transition (1s)
         }, 3500);
+
+        // Exit-Intent & Scroll-Triggered Popup
+    let exitIntentShown = false;
+    const exitIntentPopup = document.getElementById('exitIntentPopup');
+
+    function showExitIntent() {
+        if (!exitIntentShown) {
+            exitIntentPopup.classList.remove('hidden');
+            exitIntentPopup.classList.add('flex');
+            exitIntentShown = true;
+        }
+    }
+    function closeExitIntent() {
+        exitIntentPopup.classList.add('hidden');
+        exitIntentPopup.classList.remove('flex');
+    }
+    // Exit intent for desktop
+    document.addEventListener('mouseleave', function (e) {
+        if (e.clientY < 40) showExitIntent();
+    });
+    // Scroll near bottom for mobile
+    window.addEventListener('scroll', function () {
+        if (
+            !exitIntentShown &&
+            (window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 200)
+        ) {
+            showExitIntent();
+        }
+    });
+    // Close popup when clicking backdrop
+    exitIntentPopup.addEventListener('click', (e) => {
+        if (e.target === exitIntentPopup) closeExitIntent();
+    });
     </script>
 
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
